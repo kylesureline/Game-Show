@@ -28,27 +28,14 @@
     ['crumbs', 'from', 'your', 'table'],
     ['all', 'because', 'of', 'you']
   ];
-  let lives = 5;
+  let missed = 5;
   let phraseObj = {
     array: [],
     toStr: () => {
-      let str = '';
-      for(let i = 0; i < phraseObj.array.length; i++) {
-        let word = phraseObj.array[i];
-        str += word;
-        if(i < phraseObj.array.length - 1) {
-          str += ' ';
-        }
-      }
-      return str;
+      return phraseObj.array.join(' ');
     },
     letters: () => {
-      let count = 0;
-      for(let i = 0; i < phraseObj.array.length; i++) {
-        let word = phraseObj.array[i];
-        count += word.length;
-      }
-      return count;
+      return phraseObj.array.join('').length;
     }
   }
 
@@ -64,6 +51,14 @@
 	}
 
   function preloadGame() {
+
+    function resetHearts() {
+      for(let i = 0; i < heartsOl.children.length; i++) {
+        let li = heartsOl.children[i];
+        let img = li.firstElementChild;
+        img.src = 'images/liveHeart.png';
+      }
+    }
 
     function showQwerty() {
       for(let i = 0; i < qwertyButtons.length; i++) {
@@ -115,6 +110,7 @@
       }
     }
 
+    resetHearts();
     showQwerty();
     choosePhrase();
     placeLetters();
@@ -186,12 +182,14 @@
       } // end checkPhrase()
 
       if(checkPhrase(letter)) {
-        lives -= 1;
-        heartsOl.children[lives].style.display = 'none';
+        missed -= 1;
+        let li = heartsOl.children[missed];
+        let img = li.firstElementChild;
+        img.src = 'images/lostHeart.png';
       }
 
       // end game
-      if(lives === 0) {
+      if(missed === 0) {
         endGame('lost');
       }
       if(allAreShown()) {
