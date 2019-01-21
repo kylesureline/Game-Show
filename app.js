@@ -69,6 +69,7 @@
       for(let i = 0; i < qwertyButtons.length; i++) {
         let button = qwertyButtons[i];
         button.className = '';
+        button.disabled = false;
       }
     }
 
@@ -214,8 +215,10 @@
       function hideLetterInKeyRow(letter, keyRow) {
         for(let i = 0; i < keyRow.children.length; i++) {
           let button = keyRow.children[i];
-          if(letter === button.textContent) {
+          if(letter === button.textContent && !button.disabled) {
             button.className = 'chosen';
+            button.disabled = true;
+            guess(letter);
           }
         }
       }
@@ -232,16 +235,13 @@
     if(event.key === undefined) {
       if(event.target.tagName === 'BUTTON') {
         letter = event.target.textContent;
-        // event.target.style.display = 'none';
-        event.target.className = 'chosen';
       }
     } else if(event.key.match(pattern)) {
       letter = event.key;
-      hideLetter(letter);
     }
 
     if(letter !== '') {
-      guess(letter);
+      hideLetter(letter);
     }
 
   } // end inputHandler()
