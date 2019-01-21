@@ -7,26 +7,26 @@
   const scoreboard = document.querySelector('#scoreboard');
   const heartsOl = scoreboard.querySelector('ol');
   const phrases = [ // U2 Song Titles
-    ['beautiful', 'day'],
-    ['sunday', 'bloody', 'sunday'],
-    ['with', 'or', 'without', 'you'],
-    ['where', 'the', 'streets', 'have', 'no', 'name'],
-    ['the', 'unforgettable', 'fire'],
-    ['when', 'love', 'comes', 'to', 'town'],
-    ['angel', 'of', 'harlem'],
-    ['all', 'i', 'want', 'is', 'you'],
-    ['the', 'three', 'sunrises'],
-    ['spanish', 'eyes'],
-    ['sweetest', 'thing'],
-    ['even', 'better', 'than', 'the', 'real', 'thing'],
-    ['until', 'the', 'end', 'of', 'the', 'world'],
-    ['hands', 'that', 'built', 'america'],
-    ['love', 'and', 'peace', 'or', 'else'],
-    ['city', 'of', 'blinding', 'lights'],
-    ['staring', 'at', 'the', 'sun'],
-    ['original', 'of', 'the', 'species'],
-    ['crumbs', 'from', 'your', 'table'],
-    ['all', 'because', 'of', 'you']
+    'beautiful day',
+    'sunday bloody sunday',
+    'with or without you',
+    'where the streets have no name',
+    'the unforgettable fire',
+    'when love comes to town',
+    'angel of harlem',
+    'all i want is you',
+    'the three sunrises',
+    'spanish eyes',
+    'sweetest thing',
+    'even better than the real thing',
+    'until the end of the world',
+    'hands that built america',
+    'love and peace or else',
+    'city of blinding lights',
+    'staring at the sun',
+    'original of the species',
+    'crumbs from your table',
+    'all because of you'
   ];
   let missed = 5;
   let phraseObj = {
@@ -37,6 +37,11 @@
     letters: () => {
       return phraseObj.array.join('').length;
     }
+  }
+
+  function getRandomPhraseAsArray(arr) {
+    let randomPhraseIndex = Math.floor(Math.random() * phrases.length);
+    return phrases[randomPhraseIndex].split(' ');
   }
 
   function addMultipleListeners(element,events,handler) {
@@ -63,16 +68,11 @@
     function showQwerty() {
       for(let i = 0; i < qwertyButtons.length; i++) {
         let button = qwertyButtons[i];
-        button.style.display = '';
+        button.className = '';
       }
     }
 
-    function choosePhrase() {
-      let randomPhraseIndex = Math.floor(Math.random() * phrases.length);
-      phraseObj.array = phrases[randomPhraseIndex];
-    }
-
-    function placeLetters() {
+    function addPhraseToDisplay() {
 
       function removeLetters() {
         while(phrase.firstChild) {
@@ -110,10 +110,11 @@
       }
     }
 
+    missed = 5;
     resetHearts();
     showQwerty();
-    choosePhrase();
-    placeLetters();
+    phraseObj.array = getRandomPhraseAsArray();
+    addPhraseToDisplay();
 
   }
 
@@ -129,7 +130,18 @@
     document.removeEventListener('click', inputHandler);
     document.removeEventListener('keydown', inputHandler);
 
-    alert(`Game over! You ${won}!`);
+    let h2 = overlay.querySelector('h2');
+    let a = overlay.querySelector('a');
+    a.textContent = 'Play again?';
+
+    if(won) {
+      overlay.className = 'win';
+      h2.textContent = 'You won! 😀';
+    } else {
+      overlay.className = 'lose';
+      h2.textContent = 'You lost! 😢';
+    }
+    // alert(`Game over! You ${won}!`);
     overlay.style.display = '';
     preloadGame();
 
@@ -190,10 +202,10 @@
 
       // end game
       if(missed === 0) {
-        endGame('lost');
+        endGame(false);
       }
       if(allAreShown()) {
-        endGame('won');
+        endGame(true);
       }
     } // end guess()
 
@@ -203,7 +215,7 @@
         for(let i = 0; i < keyRow.children.length; i++) {
           let button = keyRow.children[i];
           if(letter === button.textContent) {
-            button.style.display = 'none';
+            button.className = 'chosen';
           }
         }
       }
@@ -220,7 +232,8 @@
     if(event.key === undefined) {
       if(event.target.tagName === 'BUTTON') {
         letter = event.target.textContent;
-        event.target.style.display = 'none';
+        // event.target.style.display = 'none';
+        event.target.className = 'chosen';
       }
     } else if(event.key.match(pattern)) {
       letter = event.key;

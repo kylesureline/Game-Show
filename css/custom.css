@@ -17,3 +17,12 @@ button,
 button {
   text-transform: uppercase;
 }
+
+.letter {
+  transition: transform color;
+  transition-duration: 1s;
+}
+
+.show {
+  transform: rotate(360deg);
+}
