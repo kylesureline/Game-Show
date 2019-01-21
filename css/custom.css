@@ -2,7 +2,18 @@ body {
   margin: 0;
 }
 
+.btn__reset,
+.letter {
+  font-family: 'Open Sans';
+}
+
 button,
 .btn__reset {
   cursor: pointer;
+  outline: 0;
+}
+
+.letter,
+button {
+  text-transform: uppercase;
 }

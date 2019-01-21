@@ -2,6 +2,7 @@
   const overlay = document.querySelector('#overlay');
   const startGame = document.querySelector('.btn__reset');
   const qwerty = document.querySelector('#qwerty');
+  const qwertyButtons = qwerty.querySelectorAll('button');
   const phrase = document.querySelector('#phrase');
   const scoreboard = document.querySelector('#scoreboard');
   const heartsOl = scoreboard.querySelector('ol');
@@ -64,12 +65,25 @@
 
   function preloadGame() {
 
+    function showQwerty() {
+      for(let i = 0; i < qwertyButtons.length; i++) {
+        let button = qwertyButtons[i];
+        button.style.display = '';
+      }
+    }
+
     function choosePhrase() {
       let randomPhraseIndex = Math.floor(Math.random() * phrases.length);
       phraseObj.array = phrases[randomPhraseIndex];
     }
 
     function placeLetters() {
+
+      function removeLetters() {
+        while(phrase.firstChild) {
+          phrase.removeChild(phrase.firstChild);
+        }
+      }
 
       function createWordUl(word) {
 
@@ -92,6 +106,8 @@
         return ul;
       }
 
+      removeLetters();
+
       for(let i = 0; i < phraseObj.array.length; i++) {
         let word = phraseObj.array[i];
         let wordUl = createWordUl(word);
@@ -99,6 +115,7 @@
       }
     }
 
+    showQwerty();
     choosePhrase();
     placeLetters();
 
@@ -113,22 +130,13 @@
 
   function endGame(won) {
 
-    function win() {
-      alert('you won');
-    }
-
-    function lose() {
-      alert('you lose');
-    }
-
     document.removeEventListener('click', inputHandler);
     document.removeEventListener('keydown', inputHandler);
 
-    if(won) {
-      win();
-    } else {
-      lose();
-    }
+    alert(`Game over! You ${won}!`);
+    overlay.style.display = '';
+    preloadGame();
+
   }
 
   function inputHandler(event) {
@@ -184,10 +192,10 @@
 
       // end game
       if(lives === 0) {
-        endGame(false);
+        endGame('lost');
       }
       if(allAreShown()) {
-        endGame(true);
+        endGame('won');
       }
     } // end guess()
 
