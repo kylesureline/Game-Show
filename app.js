@@ -1,4 +1,4 @@
-// document.addEventListener('DOMContentLoaded', (e) => {
+document.addEventListener('DOMContentLoaded', (e) => {
   const overlay = document.querySelector('#overlay');
   const startGame = document.querySelector('.btn__reset');
   const qwerty = document.querySelector('#qwerty');
@@ -246,4 +246,4 @@
 
   } // end inputHandler()
 
-// });
+});
